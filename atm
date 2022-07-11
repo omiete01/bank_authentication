@@ -1,0 +1,166 @@
+# creating a basic bank authorization function
+
+# BANK SYSTEM
+
+# i need help from line 116, withdrawal_operation
+
+import random
+
+database = {
+    4614460620: ["Esther", "Omiete", "estheromiete@gmail.com", "password", 15000],
+    8738574528: ["Boma", "Jane", "bjane001@gmail.com", "password", 10000]
+}
+
+# global current_balance = database.items(4)
+
+
+def init():
+    print("Welcome to Bank Kai!")
+
+    have_account = int(input("Do you have an account with us? 1 (yes) 2 (no) \n"))
+
+    if have_account == 1:
+        login()
+    elif have_account == 2:
+        register()
+    else:
+        print("You have selected an invalid option.")
+        init()
+
+
+def login():
+    print("******* Login *******")
+
+    user_account_number = input("What is your account number? \n")
+
+    is_valid_account_number = account_number_validation(user_account_number)
+
+    if is_valid_account_number:
+
+        password = input("What is your password? \n")
+
+        for account_number, user_details in database.items():
+            if account_number == int(user_account_number):
+                if user_details[3] == password:
+                    bank_operation(user_details)
+                else:
+                    print("Invalid account or password")
+                    login()
+        return
+    else:
+        init()
+
+
+def register():
+    print("***** Register *****")
+    user_email = input("What is your email address: \n")
+    first_name = input("What is your first name: \n")
+    last_name = input("What is your last name: \n")
+    user_password = input("Create a password: \n")
+
+    try:
+        account_number = generate_account_number()
+    except ValueError:
+        print("Account generation failed due to internet connection failure. ")
+        init()
+
+    database[account_number] = [first_name, last_name, user_email, user_password, 0]
+
+    print("Your account has been created!")
+    print("Your account number is: %d" % account_number)
+    print("Make sure you keep it safe")
+    print(" == === ===== === ==")
+
+    login()
+
+
+def account_number_validation(account_number):
+    if account_number:
+
+        if len(str(account_number)) == 10:
+
+            try:
+                int(account_number)
+                return True
+            except ValueError:
+                print("Invalid Account Number, account number should be an integer")
+        else:
+            print("Account Number must be 10 digits")
+            login()
+            return False
+    else:
+        print("Account Number is a required field")
+        login()
+        return False
+
+
+def bank_operation(user):
+    print("******* Bank Operation *******")
+    print("Welcome %s %s " % (user[0], user[1]))
+
+    selected_option = int(input("What would you like to do? (1) deposit (2) withdrawal (3) logout (4) exit \n"))
+
+    if selected_option == 1:
+        deposit_operation()
+    elif selected_option == 2:
+        withdrawal_operation()
+    elif selected_option == 3:
+        login()
+    elif selected_option == 4:
+        exit_bank()
+    else:
+        print("Invalid option selected")
+        bank_operation(user)
+
+
+def withdrawal_operation():
+    print("******* Withdrawal *******")
+    withdraw_amount = int(input("How much would you like to withdraw? (1) 500 (2) 1000 (3) 2000 (4) 5000 (5) 10000 \n"))
+
+    # get_balance()
+
+    '''if withdraw_amount <= database.items(4):
+        print("Take your cash")'''
+
+    '''for account_number, user_details in database.items():
+        if account_number == int(user_account_number):
+            if user_details[3] == password:
+                bank_operation(user_details)
+            else:
+                print("Invalid account or password")
+                login()'''
+
+    '''for current_balance, user_details in database.items():
+        if withdraw_amount == 1:
+            if withdraw_amount <= user_details[4]:
+                print("Take your cash")'''
+
+    # get current balance
+    # get amount to withdraw
+    # check if current balance > withdraw balance
+    # deduct withdrawn amount from current balance
+    # display current balance
+
+
+def deposit_operation():
+    print("Deposit operations")
+    # get current balance
+    # get amount to deposit
+    # add deposited amount to current balance
+    # display current balance
+
+
+def get_balance(user_details):
+    return user_details[4]
+
+
+def exit_bank():
+    print("This is the exit function")
+    login()
+
+
+def generate_account_number():
+    return random.randrange(1111111111, 9999999999)
+
+
+init()
